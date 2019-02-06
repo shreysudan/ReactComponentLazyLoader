@@ -1,0 +1,30 @@
+{
+  "name": "reactlazyload",
+  "version": "1.0.0",
+  "description": "A package which lazily loads it's children components based on viewport visibility of the component. Useful in lazyloading images or any other custom component.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src/ -d lib/",
+    "prepublish": "npm run build",
+    "flow": "flow"
+  },
+  "keywords": [
+    "React",
+    "LazyLoad"
+  ],
+  "author": "Shrey Sudan",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-flow": "^6.23.0",
+    "eslint": "^5.13.0",
+    "flow": "^0.2.3",
+    "flow-bin": "^0.92.1",
+    "prettier": "^1.16.4"
+  },
+  "dependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  }
+}
