@@ -31,7 +31,7 @@ class ReactLazyLoader extends React.Component<Props, State>{
     };
     this.observer = null;
     this.placeholderNode = null;
-    this.handleViewportChangeEvents = this.handleViewportChangeEvents.bind(this);
+    this.handleViewportChangeEvents = throttle(this.handleViewportChangeEvents, 50);
   }
 
   componentDidMount() {
