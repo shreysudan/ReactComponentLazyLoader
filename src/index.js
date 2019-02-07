@@ -2,17 +2,18 @@
 import * as React from "react";
 import { findDOMNode } from "react-dom";
 import PropTypes from "prop-types";
+import throttle from "lodash/throttle";
 import { isIntersectionObserverSupported } from "./utils";
 
 type Props = {
-    children: React.Node,
-    placeholder: ?React.Node,
-    threshold: number
+  children: React.Node,
+  placeholder: ?React.Node,
+  threshold: number
 };
 
 type State = {
-    renderLazyLoadedComponent: boolean,
-    isIntersectionObserverAvailableinWindow: boolean
+  renderLazyLoadedComponent: boolean,
+  isIntersectionObserverAvailableinWindow: boolean
 }
 
 class ReactLazyLoader extends React.Component<Props, State>{
@@ -30,6 +31,7 @@ class ReactLazyLoader extends React.Component<Props, State>{
     };
     this.observer = null;
     this.placeholderNode = null;
+    this.handleViewportChangeEvents = this.handleViewportChangeEvents.bind(this);
   }
 
   componentDidMount() {
