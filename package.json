@@ -1,6 +1,6 @@
 {
   "name": "react-component-lazy-loader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A package which lazily loads it's children components based on viewport visibility of the component. Useful in lazyloading images or any other custom component.",
   "main": "./lib/index.js",
   "scripts": {
@@ -10,10 +10,17 @@
     "flow": "flow"
   },
   "keywords": [
-    "React",
-    "LazyLoad",
+    "react",
     "reactjs",
-    "Component"
+    "lazy",
+    "load",
+    "lazyLoad",
+    "reactjs",
+    "component",
+    "react-lazy-load",
+    "render",
+    "react-lazyloading",
+    "react-component"
   ],
   "author": "Shrey Sudan",
   "license": "ISC",
