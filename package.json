@@ -1,5 +1,5 @@
 {
-  "name": "reactlazyloader",
+  "name": "react-component-lazy-loader",
   "version": "1.0.0",
   "description": "A package which lazily loads it's children components based on viewport visibility of the component. Useful in lazyloading images or any other custom component.",
   "main": "./lib/index.js",

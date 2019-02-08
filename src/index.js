@@ -1,7 +1,6 @@
 // @flow
 import * as React from "react";
 import { findDOMNode } from "react-dom";
-import PropTypes from "prop-types";
 import throttle from "lodash/throttle";
 import { isIntersectionObserverSupported } from "./utils";
 
@@ -16,7 +15,7 @@ type State = {
   isIntersectionObserverAvailableinWindow: boolean
 }
 
-class ReactLazyLoader extends React.Component<Props, State>{
+class ReactComponentLazyLoader extends React.Component<Props, State>{
   static defaultProps = {
     placeholder: <div />,
     threshold: 0
@@ -89,4 +88,4 @@ class ReactLazyLoader extends React.Component<Props, State>{
   }
 }
 
-export default ReactLazyLoader;
+export default ReactComponentLazyLoader;
