@@ -1,4 +1,3 @@
-// @flow
-export const isIntersectionObserverSupported = (): boolean => {
+export const isIntersectionObserverSupported = () => {
   return "IntersectionObserver" in window;
 };

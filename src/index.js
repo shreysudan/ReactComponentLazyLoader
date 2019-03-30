@@ -1,46 +1,43 @@
-// @flow
-import * as React from "react";
-import { findDOMNode } from "react-dom";
-import throttle from "lodash/throttle";
-import { isIntersectionObserverSupported } from "./utils";
+import * as React from 'react';
+import { findDOMNode } from 'react-dom';
+import { PropTypes } from 'prop-types';
+import throttle from 'lodash/throttle';
+import { isIntersectionObserverSupported } from './utils';
 
-type Props = {
-  children: React.Node,
-  placeholder: ?React.Node,
-  threshold: number
-};
-
-type State = {
-  renderLazyLoadedComponent: boolean,
-  isIntersectionObserverAvailableinWindow: boolean
-}
-
-class ReactComponentLazyLoader extends React.Component<Props, State>{
+class ReactComponentLazyLoader extends React.Component {
   static defaultProps = {
     placeholder: <div />,
-    threshold: 0
+    threshold: 0,
   };
-  observer: any;
-  placeholderNode: any;
-  constructor(props: Props) {
+
+  static propTypes = {
+    threshold: PropTypes.number,
+    children: PropTypes.node,
+    placeholder: PropTypes.node,
+  };
+
+  constructor(props) {
     super(props);
     this.state = {
       renderLazyLoadedComponent: false,
-      isIntersectionObserverAvailableinWindow: isIntersectionObserverSupported()
+      isIntersectionObserverAvailableinWindow: isIntersectionObserverSupported(),
     };
     this.observer = null;
     this.placeholderNode = null;
-    this.handleViewportChangeEvents = throttle(this.handleViewportChangeEvents, 50);
+    this.handleViewportChangeEvents = throttle(
+      this.handleViewportChangeEvents,
+      50
+    );
   }
 
   componentDidMount() {
     this.placeholderNode = findDOMNode(this);
-    if (typeof this.placeholderNode === "object") {
+    if (typeof this.placeholderNode === 'object') {
       if (this.state.isIntersectionObserverAvailableinWindow) {
         this.createObserver();
       } else {
-        window.addEventListener("resize", this.handleViewportChangeEvents);
-        window.addEventListener("scroll", this.handleViewportChangeEvents);
+        window.addEventListener('resize', this.handleViewportChangeEvents);
+        window.addEventListener('scroll', this.handleViewportChangeEvents);
       }
     }
   }
@@ -53,8 +50,8 @@ class ReactComponentLazyLoader extends React.Component<Props, State>{
       .top;
     if (distanceOfElementFromTop - threshold < scrolledFromTop) {
       this.setState({ renderLazyLoadedComponent: true });
-      window.removeEventListener("resize", this.handleViewportChangeEvents);
-      window.removeEventListener("scroll", this.handleViewportChangeEvents);
+      window.removeEventListener('resize', this.handleViewportChangeEvents);
+      window.removeEventListener('scroll', this.handleViewportChangeEvents);
     }
   };
 
@@ -63,7 +60,7 @@ class ReactComponentLazyLoader extends React.Component<Props, State>{
     const options = {
       root: null,
       rootMargin: `${threshold}px`,
-      threshold: 0.0
+      threshold: 0.0,
     };
 
     this.observer = new IntersectionObserver(
@@ -73,7 +70,7 @@ class ReactComponentLazyLoader extends React.Component<Props, State>{
     this.observer.observe(this.placeholderNode);
   };
 
-  handleViewportChange = (changes: Array<IntersectionObserverEntry>) => {
+  handleViewportChange = changes => {
     changes.forEach(change => {
       if (change.intersectionRatio > 0) {
         this.setState({ renderLazyLoadedComponent: true });
@@ -82,7 +79,7 @@ class ReactComponentLazyLoader extends React.Component<Props, State>{
     });
   };
 
-  render(): any {
+  render() {
     const { children, placeholder } = this.props;
     return this.state.renderLazyLoadedComponent ? children : placeholder;
   }
