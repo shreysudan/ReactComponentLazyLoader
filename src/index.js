@@ -15,6 +15,7 @@ class ReactComponentLazyLoader extends React.Component {
     thresholdY: 0,
     wrapperID: null,
     callback: null,
+    noLazyHorizontalScroll: false,
   };
 
   static propTypes = {
@@ -33,8 +34,8 @@ class ReactComponentLazyLoader extends React.Component {
       renderLazyLoadedComponent: false,
       isIntersectionObserverAvailableinWindow: isIntersectionObserverSupported(),
       callbackCalled: false,
-      distanceOfElementFromTop: 0,
-      distanceOfElementFromLeft: 0,
+      distanceOfElementFromTop: undefined,
+      distanceOfElementFromLeft: undefined,
     };
     this.observer = null;
     this.placeholderNode = null;
@@ -90,13 +91,14 @@ class ReactComponentLazyLoader extends React.Component {
       this.removeEventListeners();
     } else if (wrapperID) {
       const wrapperNode = document.getElementById(`${wrapperID}`);
+      if (this.loadOnVerticalScroll() && this.loadOnHorizontalScroll()) {
+        this.setState({ renderLazyLoadedComponent: true });
+        this.removeEventListeners(wrapperNode);
+      }
       if (!this.horizontalEventAdded) {
         wrapperNode.addEventListener('scroll', this.handleWrapperScroll);
+        wrapperNode.addEventListener('resize', this.handleWrapperScroll);
         this.horizontalEventAdded = true;
-      }
-      if (this.loadOnVerticalScroll() && !this.forcefulHorizontalScroll) {
-        wrapperNode.scrollLeft = 1;
-        this.forcefulHorizontalScroll = true;
       }
     } else if (this.loadOnVerticalScroll() && this.loadOnHorizontalScroll()) {
       this.setState({ renderLazyLoadedComponent: true });
@@ -113,8 +115,7 @@ class ReactComponentLazyLoader extends React.Component {
       distanceOfElementFromLeft < window.innerWidth + scrollLeft;
     if (this.loadOnVerticalScroll() && loadOnHorizontalScroll) {
       this.setState({ renderLazyLoadedComponent: true });
-      this.removeEventListeners();
-      wrapperNode.removeEventListener('scroll', this.handleWrapperScroll);
+      this.removeEventListeners(wrapperNode);
     }
   };
 
@@ -123,9 +124,13 @@ class ReactComponentLazyLoader extends React.Component {
     window.addEventListener('scroll', this.handleViewportChangeEvents);
   };
 
-  removeEventListeners = () => {
+  removeEventListeners = wrapperNode => {
     window.removeEventListener('resize', this.handleViewportChangeEvents);
     window.removeEventListener('scroll', this.handleViewportChangeEvents);
+    if (wrapperNode) {
+      wrapperNode.removeEventListener('scroll', this.handleWrapperScroll);
+      wrapperNode.removeEventListener('resize', this.handleWrapperScroll);
+    }
   };
 
   loadOnVerticalScroll = () => {
@@ -141,7 +146,10 @@ class ReactComponentLazyLoader extends React.Component {
     const { thresholdX } = this.props;
     const scrollXDistance = currentScrollPosition().scrollX;
     const scrolledFromLeft = window.innerWidth + scrollXDistance;
-    return distanceOfElementFromLeft - thresholdX < scrolledFromLeft;
+    return (
+      distanceOfElementFromLeft - thresholdX < scrolledFromLeft ||
+      distanceOfElementFromLeft < window.innerWidth
+    );
   };
 
   createObserver = () => {
