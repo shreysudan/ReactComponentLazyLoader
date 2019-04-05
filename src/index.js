@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { findDOMNode } from 'react-dom';
 import { PropTypes } from 'prop-types';
-import throttle from 'lodash/throttle';
-import pathOr from 'lodash/fp/pathOr';
+import throttle from 'lodash.throttle';
+import get from 'lodash.get';
 import {
   isIntersectionObserverSupported,
   currentScrollPosition,
@@ -16,6 +16,7 @@ class ReactComponentLazyLoader extends React.Component {
     wrapperID: null,
     callback: null,
     noLazyHorizontalScroll: false,
+    throttleWait: 75
   };
 
   static propTypes = {
@@ -26,6 +27,7 @@ class ReactComponentLazyLoader extends React.Component {
     noLazyHorizontalScroll: PropTypes.bool,
     wrapperID: PropTypes.string,
     callback: PropTypes.func,
+    throttleWait: PropTypes.number
   };
 
   constructor(props) {
@@ -41,7 +43,7 @@ class ReactComponentLazyLoader extends React.Component {
     this.placeholderNode = null;
     this.handleViewportChange = this.handleViewportChange.bind(this);
     this.handleWrapperScroll = this.handleWrapperScroll.bind(this);
-    this.handleWrapperScroll = throttle(this.handleWrapperScroll, 75);
+    this.handleWrapperScroll = throttle(this.handleWrapperScroll, this.props.throttleWait);
     this.addEventListeners = this.addEventListeners.bind(this);
     this.removeEventListeners = this.removeEventListeners.bind(this);
     this.handleViewportChangeEvents = this.handleViewportChangeEvents.bind(
@@ -49,7 +51,7 @@ class ReactComponentLazyLoader extends React.Component {
     );
     this.handleViewportChangeEvents = throttle(
       this.handleViewportChangeEvents,
-      75
+      this.props.throttleWait
     );
     this.horizontalEventAdded = false;
     this.forcefulHorizontalScroll = false;
@@ -179,18 +181,18 @@ class ReactComponentLazyLoader extends React.Component {
         const scrollXDistance = currentScrollPosition().scrollX;
         const scrollYDistance = currentScrollPosition().scrollY;
         const scrolledFromTop =
-          pathOr(0, 'rootBounds.height', change) + scrollYDistance;
+          get(change, 'rootBounds.height', 0) + scrollYDistance;
         const scrolledFromLeft =
-          pathOr(0, 'rootBounds.width', change) + scrollXDistance;
-        const distanceOfElementFromTop = pathOr(
-          0,
+          get(change, 'rootBounds.width', 0) + scrollXDistance;
+        const distanceOfElementFromTop = get(
+          change,
           'boundingClientRect.top',
-          change
+          0
         );
-        const distanceOfElementFromLeft = pathOr(
-          0,
+        const distanceOfElementFromLeft = get(
+          change,
           'boundingClientRect.left',
-          change
+          0
         );
         if (
           distanceOfElementFromTop < scrolledFromTop &&

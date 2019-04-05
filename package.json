@@ -23,6 +23,10 @@
   ],
   "author": "Shrey Sudan",
   "license": "ISC",
+  "peerDependencies": {
+    "react": "^16.x.x",
+    "react-dom": "^16.x.x"
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^7.0.0-bridge.0",
@@ -33,9 +37,8 @@
     "prettier": "^1.16.4"
   },
   "dependencies": {
-    "lodash": "^4.17.11",
-    "prop-types": "^15.7.2",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "lodash.get": "^4.4.2",
+    "lodash.throttle": "^4.1.1",
+    "prop-types": "^15.7.2"
   }
 }
