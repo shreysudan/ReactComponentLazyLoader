@@ -20,7 +20,7 @@ npm install react-component-lazy-loader
 
 ### Usage
 
-Simply wrap the component which you want to lazily load the component with ReactComponentLazyLoader and based on the props given, the component will start rendering it's children only when they're visible in viewport.
+Simply wrap the component which you want to lazily load with ReactComponentLazyLoader and based on the props given, the component will start rendering it's children only when they're visible in viewport.
 
   
 
@@ -36,7 +36,7 @@ import  ReactComponentLazyLoader  from  'react-component-lazy-loader';
 
 <ReactComponentLazyLoader>
 
-<YourComponent>
+    <YourComponent>
 
 </ReactComponentLazyLoader>
 
@@ -59,7 +59,7 @@ Similarly, a negative value for thresholdY will make components load later.
 
 <ReactComponentLazyLoader  thresholdX={200}>
 
-<img src="...">
+    <img src="...">
 
 </ReactComponentLazyLoader>
 
@@ -79,7 +79,7 @@ Similar to thresholdY, a negative value for thresholdY will make components load
 
 <ReactComponentLazyLoader  thresholdY={200}>
 
-<img src="...">
+    <img src="...">
 
 </ReactComponentLazyLoader>
 
@@ -100,7 +100,7 @@ Placeholder can be anything - a simple <img> with a default image or any other v
 
 <ReactComponentLazyLoader  thresholdY={200}  placeholder={<img  src='...'/>}>
 
-<img>
+    <img>
 
 </ReactComponentLazyLoader>
 
@@ -122,7 +122,7 @@ A callback function which when passed, will be called once the lazyloading condi
    placeholder={<img  src='...'/>}
    callback={() => {// Do something}}>
    
-<img>
+    <img>
 
 </ReactComponentLazyLoader>
 
