@@ -16,18 +16,18 @@ class ReactComponentLazyLoader extends React.Component {
     wrapperID: null,
     callback: null,
     noLazyHorizontalScroll: false,
-    throttleWait: 75
+    throttleWait: 75,
   };
 
   static propTypes = {
+    callback: PropTypes.func,
+    children: PropTypes.node.isRequired,
+    noLazyHorizontalScroll: PropTypes.bool,
+    placeholder: PropTypes.node,
     thresholdX: PropTypes.number,
     thresholdY: PropTypes.number,
-    children: PropTypes.node.isRequired,
-    placeholder: PropTypes.node,
-    noLazyHorizontalScroll: PropTypes.bool,
+    throttleWait: PropTypes.number,
     wrapperID: PropTypes.string,
-    callback: PropTypes.func,
-    throttleWait: PropTypes.number
   };
 
   constructor(props) {
@@ -41,9 +41,10 @@ class ReactComponentLazyLoader extends React.Component {
     };
     this.observer = null;
     this.placeholderNode = null;
+    const { throttleWait } = this.props;
     this.handleViewportChange = this.handleViewportChange.bind(this);
     this.handleWrapperScroll = this.handleWrapperScroll.bind(this);
-    this.handleWrapperScroll = throttle(this.handleWrapperScroll, this.props.throttleWait);
+    this.handleWrapperScroll = throttle(this.handleWrapperScroll, throttleWait);
     this.addEventListeners = this.addEventListeners.bind(this);
     this.removeEventListeners = this.removeEventListeners.bind(this);
     this.handleViewportChangeEvents = this.handleViewportChangeEvents.bind(
@@ -51,17 +52,18 @@ class ReactComponentLazyLoader extends React.Component {
     );
     this.handleViewportChangeEvents = throttle(
       this.handleViewportChangeEvents,
-      this.props.throttleWait
+      throttleWait
     );
     this.horizontalEventAdded = false;
     this.forcefulHorizontalScroll = false;
   }
 
   componentDidMount() {
+    const { isIntersectionObserverAvailableinWindow } = this.state;
     this.placeholderNode = findDOMNode(this);
     if (typeof this.placeholderNode === 'object') {
       this.setPlaceholderNodePosition();
-      if (this.state.isIntersectionObserverAvailableinWindow) {
+      if (isIntersectionObserverAvailableinWindow) {
         this.createObserver();
       } else {
         this.addEventListeners();
@@ -70,7 +72,8 @@ class ReactComponentLazyLoader extends React.Component {
   }
 
   componentWillUnmount() {
-    if (this.state.isIntersectionObserverAvailableinWindow) {
+    const { isIntersectionObserverAvailableinWindow } = this.state;
+    if (isIntersectionObserverAvailableinWindow) {
       this.observer.observe(this.placeholderNode);
     } else {
       window.removeEventListener('resize', this.handleViewportChangeEvents);
@@ -112,7 +115,7 @@ class ReactComponentLazyLoader extends React.Component {
     const { wrapperID } = this.props;
     const { distanceOfElementFromLeft } = this.state;
     const wrapperNode = document.getElementById(`${wrapperID}`);
-    const scrollLeft = wrapperNode.scrollLeft;
+    const { scrollLeft } = wrapperNode;
     const loadOnHorizontalScroll =
       distanceOfElementFromLeft < window.innerWidth + scrollLeft;
     if (this.loadOnVerticalScroll() && loadOnHorizontalScroll) {
