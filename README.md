@@ -1,8 +1,8 @@
-# [WIP] React Component Lazy Loader
+# React Component Lazy Loader
 
-A simple React component, which lazily loads it's children based on viewport visibility. Uses [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) for increased performance, if browser supports it, otherwise fallbacks to an event based visibility check system to check for position of component with respect to viewport.
+A simple React component, which lazily loads it's children based on viewport visibility. Uses [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) for increased performance, if browser supports it, otherwise fallbacks to an event based system to check for position of component with respect to viewport.
 
-Handles both horizontal as well as vertical LazyLoading of elements.
+Handles both vertical as well as horizontal LazyLoading of elements.
 
   
 
@@ -57,7 +57,7 @@ Similarly, a negative value for thresholdY will make components load later.
 
 ```javascript
 
-<ReactComponentLazyLoader  thresholdX={200}>
+<ReactComponentLazyLoader  thresholdY={200}>
 
     <img src="...">
 
@@ -71,13 +71,13 @@ In above example, the <img> will render when the <img> component is 200 pixels b
 ### thresholdX
 
 A positive value for thresholdX(default: 0) makes components load sooner, when scrolling horizontally.
-Similar to thresholdY, a negative value for thresholdY will make components load later.
+Similar to thresholdX, a negative value for thresholdX will make components load later.
 
   
 
 ```javascript
 
-<ReactComponentLazyLoader  thresholdY={200}>
+<ReactComponentLazyLoader  thresholdX={200}>
 
     <img src="...">
 
@@ -120,9 +120,9 @@ A callback function which when passed, will be called once the lazyloading condi
 <ReactComponentLazyLoader  
    thresholdY={200}  
    placeholder={<img  src='...'/>}
-   callback={() => {// Do something}}>
+   callback={() => {// Do something}>
    
-    <img>
+    <CustomComponent>
 
 </ReactComponentLazyLoader>
 
@@ -130,6 +130,6 @@ A callback function which when passed, will be called once the lazyloading condi
 
 ### wrapperID
 
-Typically, vertical scroll is implemented with respect to a parent container and not the body of the document, hence in order to lazyload components on vertical scroll, an id would need to be set on the parent element, with respect to which vertical scroll happens. 
-This id would need to be passed as wrapperID to the ReactComponentLazyLoader, for vertical lazyloading to work.
+Typically, horizontal scroll is implemented with respect to a parent container and not the body of the document, hence in order to lazyload components on horizontal scroll, an id would need to be set on the parent element, with respect to which horizontal scroll happens. 
+This id would need to be passed as a prop named wrapperID to the ReactComponentLazyLoader, for horizontal lazyloading to work.
 
