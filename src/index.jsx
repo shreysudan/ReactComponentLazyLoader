@@ -74,7 +74,7 @@ class ReactComponentLazyLoader extends React.Component {
   componentWillUnmount() {
     const { isIntersectionObserverAvailableinWindow } = this.state;
     if (isIntersectionObserverAvailableinWindow) {
-      this.observer.observe(this.placeholderNode);
+      this.observer.disconnect();
     } else {
       window.removeEventListener('resize', this.handleViewportChangeEvents);
       window.removeEventListener('scroll', this.handleViewportChangeEvents);
